@@ -31,23 +31,26 @@ public class HomeActivity extends AppCompatActivity
 
         Cursor c = manager.GetAllEntries();
         String[] fromColumns = { MoneySpentEntry._ID, MoneySpentEntry.COLUMN_NAME_DATE, MoneySpentEntry.COLUMN_NAME_AMOUNT };
-        int[] toViews = { R.id.money_spent_row_id, R.id.money_spent_row_date, R.id.money_spent_row_amount };
-        moneySpentCursorAdapter = new MoneySpentCursorAdapter(this, R.layout.money_spent_row, c, fromColumns, toViews, 0);
+        int[] toViews = { R.id.moneySpentListItemId, R.id.moneySpentListItemDate, R.id.moneySpentListItemValue };
+        moneySpentCursorAdapter = new MoneySpentCursorAdapter(this, R.layout.money_spent_list_item, c, fromColumns, toViews, 0);
 
         moneySpentListView = (ListView) findViewById(R.id.moneySpentListView);
         moneySpentListView.setAdapter(moneySpentCursorAdapter);
 
         addButton = (Button) findViewById(R.id.addButton);
+        // todo: separate method
         addButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
                 MoneySpentManager manager = new MoneySpentManager(v.getContext());
-                manager.AddEntry(new Date(), Long.parseLong(amountEditText.getText().toString()));
+                manager.AddEntry(new Date(), Double.parseDouble(amountEditText.getText().toString()));
 
                 moneySpentCursorAdapter.changeCursor(manager.GetAllEntries());
                 moneySpentCursorAdapter.notifyDataSetChanged();
+
+                amountEditText.setText("");
             }
         });
 

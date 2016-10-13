@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import nestel.dailyspender.db.MoneySpentContract.MoneySpentEntry;
@@ -24,16 +26,19 @@ public class MoneySpentCursorAdapter extends SimpleCursorAdapter
     @Override
     public void bindView(View view, Context context, Cursor cursor)
     {
-        TextView dateTextView = (TextView) view.findViewById(R.id.money_spent_row_date);
-        TextView amountTextView = (TextView) view.findViewById(R.id.money_spent_row_amount);
-        Button deleteEntryButton = (Button) view.findViewById(R.id.remove_money_spent_row);
+        TextView dateTextView = (TextView) view.findViewById(R.id.moneySpentListItemDate);
+        TextView amountTextView = (TextView) view.findViewById(R.id.moneySpentListItemValue);
+        Button deleteEntryButton = (Button) view.findViewById(R.id.moneySpentListItemRemoveButton);
 
         Date date = new Date(cursor.getLong(cursor.getColumnIndex(MoneySpentEntry.COLUMN_NAME_DATE)));
         double amount = cursor.getDouble(cursor.getColumnIndex(MoneySpentEntry.COLUMN_NAME_AMOUNT));
 
-        dateTextView.setText(date.toString());
-        amountTextView.setText(String.valueOf(amount));
+        SimpleDateFormat ft = new SimpleDateFormat("dd. MM. yyyy hh:mm");
 
+        dateTextView.setText(ft.format(date));
+        amountTextView.setText(String.valueOf(amount) + "€");
+
+        // todo: fix to delete the right entry
         deleteEntryButton.setOnClickListener(new View.OnClickListener()
         {
             // todo: onClick needs to remove the id which has been clicked somehow
